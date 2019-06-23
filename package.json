@@ -1,0 +1,14 @@
+{
+  "name": "mmm-mealplan",
+  "version": "1.0.0",
+  "description": "",
+  "main": "MMM-MealPlan.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lokijs": "^1.5.6"
+  }
+}

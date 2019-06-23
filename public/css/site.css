@@ -1,0 +1,170 @@
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .col-1 {width: 8.33%;}
+        .col-2 {width: 16.66%;}
+        .col-3 {width: 25%;}
+        .col-4 {width: 33.33%;}
+        .col-5 {width: 41.66%;}
+        .col-6 {width: 50%;}
+        .col-7 {width: 58.33%;}
+        .col-8 {width: 66.66%;}
+        .col-9 {width: 75%;}
+        .col-10 {width: 83.33%;}
+        .col-11 {width: 91.66%;}
+        .col-12 {width: 100%;}
+        [class*="col-"] {
+            float: left;
+            padding: 15px;
+            /* border: 1px solid red; */
+        }
+
+        .row::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+        fieldset {
+            padding-top:1.5em;
+        }
+        
+
+        .nav{
+            width:100%;
+            display:flex;
+            direction: row ;
+            align-items: center;
+            justify-content: center;
+            /* border: 1px red solid; */
+        }
+        .nav-item{
+            /* flex-grow:1;    */
+            margin: 5px;
+            align-self: center;
+        }
+        
+        .nav-right{
+            margin-left: auto;
+            /* align-self: center; */
+        }
+        .nav-item-right{
+            /* margin-left: auto; */
+            /* align-self: center; */
+        }
+        /* .nav-left{
+            flex-grow:1;
+            align-self: flex-start;
+        }
+
+        .nav-right{
+            flex-grow:1;
+            align-self: flex-end;
+        } */
+        .element {
+
+            display: flex; 
+            justify-content: center;
+            flex-direction: column;
+            /* align-items: center; */
+            background-color: none;
+            /* border: 1px blue solid; */
+            /* border-radius: 8px; */
+            margin: 2 2 2 2;
+        }
+        .element-header
+        {
+            /* width: 768px; */
+            /* align-self: center; */
+            /* max-width: 768px; */
+            display: flex;
+            /* flex-grow: 1; */
+            /* flex-direction: row; */
+            /* justify-content: space-between; */
+            background-color:#fafafb;
+            border-radius:  5px 5px 0px 0px ;
+            margin: 2 2 0 2;
+        }
+        .element-header, .element-body {
+            min-height: 10px;
+            align-self: center;
+            width: 768px;
+            max-width: 768px;
+            flex-direction: row;
+            background-color:#fafafb;
+        }
+        @media only screen and (max-width: 768px) { 
+            .element-header, .element-body {
+              width: 100%;
+              max-width: 100%;
+            }
+          }
+
+        .element-body
+        {
+            flex-direction: column;
+            border-radius: 0px 0px 5px 5px ;
+            margin: 0 2 2 2;
+        }
+        
+        .element-row
+        {
+            display: flex ;
+            flex-grow: 1;
+            flex-direction: row;
+        }
+        .element-row > .toggle{
+            flex-grow: 1;
+        }
+        .element-row > .data-input{
+            flex-grow: 4;
+        }
+        input[type=checkbox] {
+            display: none;
+          }
+          
+        input[type=checkbox] + label {
+        color: #ccc;
+        cursor: pointer;
+        }
+          
+        input[type=checkbox]:checked + label {
+        color: #333;
+        }
+
+          
+        .btn-sm{
+            width: .2em;
+            height: .2em;
+        }
+        .btn-sqr
+        {
+            margin: 2px 5px 2px 5px ;
+            background-color:#fafafb    ;
+            border-radius: 2em;
+            border: none;
+            outline: none;
+            height: 2em;    
+            width: 2em ;
+        }
+        .btn-sqr:hover{
+            background-color: #dbdbdba4;
+            cursor: pointer ;
+            border: none;
+        }
+        .btn-sqr:active{
+            background-color: yellow;
+            border: none;
+        }
+
+        .txt{
+            flex-grow:1;
+            border-radius: 0.5em;
+            box-shadow: none;
+            height: 2em;
+            margin: 2px 5px 2px 5px ;
+            width: auto;
+        }
+        h1 { font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif; font-size: 24px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 26.4px; } h3 { font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 15.4px; } p { font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 20px; } blockquote { font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif; font-size: 21px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 30px; } pre { font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 18.5714px; }
+        

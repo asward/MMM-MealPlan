@@ -1,0 +1,21 @@
+<form action="" method="post">
+    <div class="form-group">
+        <label for="mealName">Meal Planned for {{meal_date}}</label>        
+        <select class="form-control" id="meal-select"  name="mealName" onload="">
+                {{meal_name_list}}
+        </select>   
+        
+        <script>
+            document.querySelector('#meal-select>option[value="{{meal_name}}"]').setAttribute('selected','')
+
+        </script>
+        <small id="mealHelp" class="form-text text-muted">Name of meal.</small>
+    </div>
+    <!-- <div class="form-group">
+        <label for="durationText">Duration</label>
+        <input type="text" name="duration" class="form-control" id="durationText" placeholder="30" value="{{duration}}">
+        <small id="durationHelp" class="form-text text-muted">The duration (in seconds) to display the Announcement.</small>
+    </div> -->
+    <input type="submit" name="action" class="btn btn-primary" value="Update" />
+    <input type="submit" name="action" class="btn btn-primary" value="Delete" />
+</form>
