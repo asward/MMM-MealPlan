@@ -10,7 +10,7 @@ const loki = require('lokijs');
 const moment = require('moment');
 
 Module = {
-	configDefaults: {},
+	configDefaults: {num_days: 7},
 	register: function (name, moduleDefinition) {
 		// console.log("Module config loaded: " + name);
 		Module.configDefaults[name] = moduleDefinition.defaults;
@@ -58,26 +58,26 @@ module.exports = NodeHelper.create({
         var self = this ;
         console.log(this.name + " received a socket notification: " + notification + " - Payload: " + payload);
 
-        if (notification == "GET_MEAL_PLAN") {
-
+        if (notification == "GET_MEAL_PLAN"){
             console.log(this.name + " Sending Meal Plan ");
-            self.sendSocketNotification('UPDATE_MEAL_PLAN', self.getMealPlan(payload.days_ahead || 7));
+            
+            self.sendSocketNotification('UPDATE_MEAL_PLAN', self.getMealPlan(payload.start_date,payload.num_days));
         } 
     },
 
-    getMealPlan: function(days_ahead = 7){
+    getMealPlan: function(start_date,num_days){
+        
         var self = this ;
         //GETS days_ahead FROM TODAYS DATE OF MEALS
         //DB STORES ID FOR THE MEAL
         //METHOD RETURNS THE NAME OF THE MEAL
         //IF DB DOESN"T CONTAIN DATA FOR THOSE DATES IT'S GENERATED RANDOMLY
         var meal_plan = [];
-
-        for(i=0;i<days_ahead;i++){
-            // console.log(i) ;
+        for(i=0;i<num_days;i++){
+            console.log(i) ;
             var planned_meal = {} ;
             //GET EACH DAY PLANNED
-            var searchDate =  moment().add(i,'day').format('YYYYMMDD') ;
+            var searchDate =  moment(start_date).add(i,'day').format('YYYYMMDD') ;
             var plan = self.planned_meals.findOne( { date: { '$eq' :searchDate } } ) ;
             
             //IF NO DATA, RANDOMLY PICK A MEAL, ADD TO DB FOR THE DAY AND PUSH INTO MEAL PLAN
@@ -138,16 +138,29 @@ module.exports = NodeHelper.create({
         ///MAIN- MEALPLAN
         self.expressApp.route('/mealplan')
         .get(function (req, res) {
-            var currentMealPlanListItems = self.renderListTemplate('/public/mealplan/mealplan_list_item.html', self.getMealPlan());
-            var currentMealPlanList = self.renderTemplate('/public/mealplan/mealplan_list.html', {meal_list:currentMealPlanListItems});
+            var meal_plan_index = self.renderTemplate('/public/mealplan/mealplan_index.html', {});
             var buttons = self.renderTemplate('/public/view_meals_btn.html', {});
         
             var template =  self.renderTemplate('/public/template.html',
             {
-                content: currentMealPlanList,
+                content:  meal_plan_index,
                 buttons:  buttons
             }) ;
             res.send(template); 
+        });
+
+        
+        ///MAIN- MEALPLAN
+        self.expressApp.route('/partial/mealplan/:date_start/:num_days')
+        .get(function (req, res) {
+
+            var date_start = req.params.date_start ;
+            var num_days = req.params.num_days ;
+
+            var currentMealPlanListItems = self.renderListTemplate('/public/mealplan/mealplan_list_item.html', self.getMealPlan(date_start,num_days));
+            var currentMealPlanList = self.renderTemplate('/public/mealplan/mealplan_list.html', {meal_list:currentMealPlanListItems});
+        
+            res.send(new Buffer(currentMealPlanList)); 
         });
 
 
