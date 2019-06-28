@@ -125,8 +125,11 @@ module.exports = NodeHelper.create({
     },
 
     getAllMeals: function(){
-        return this.meals.chain().data({removeMeta:true}).sort((a,b)=>{return a.name.localeCompare(b.name);});
-
+        var meals =  this.meals.chain().data().sort((a,b)=>{return a.name.localeCompare(b.name);}).map((m)=>{
+            m.id = m.$loki;
+            return m;
+        });     
+        return meals ;
     },
     createNewMeal: function(meal_name){
         var self = this ;
