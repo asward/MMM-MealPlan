@@ -2,7 +2,8 @@ Module.register("MMM-MealPlan",{
     index: 0,
     meal_plan: [],
     defaults:{
-        num_days: 7,
+        num_days: 10,
+        generateMeals: false ,
     },
 
     //SELECTS and lists your meals for the week! Enter list of all meals you regularly prepare. Browse
@@ -57,7 +58,8 @@ Module.register("MMM-MealPlan",{
     start: function() {
         var self = this ;
 
-        // self.getMealPlan() ;      
+        this.sendSocketNotification('SET_CONFIG', this.config);
+        
         Log.log(this.name + ' is started!');        
 
         self.updateDom(0);

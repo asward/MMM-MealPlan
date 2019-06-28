@@ -61,11 +61,21 @@ module.exports = NodeHelper.create({
         if (notification == "GET_MEAL_PLAN"){
             console.log(this.name + " Sending Meal Plan ");
             
-            self.sendSocketNotification('UPDATE_MEAL_PLAN', self.getMealPlan(payload.start_date,payload.num_days));
+            self.sendSocketNotification('UPDATE_MEAL_PLAN', self.getMealPlan(payload.start_date,payload.num_days,false));
         } 
+        else if (notification === "SET_CONFIG")
+        {
+            this.config = payload;
+            console.log(this.config);
+        }  
     },
-
-    getMealPlan: function(start_date,num_days){
+    getRandomMeal: function(){ 
+        // RANDOMLY PICK A MEAL
+        var meal_ids = this.meals.where(x=>true).map(m=>m.$loki);
+        var random_meal_id_index = Math.floor(Math.random() *  meal_ids.length);
+        return self.meals.findOne( { '$loki': { '$eq' :meal_ids[random_meal_id_index] } });
+    },
+    getMealPlan: function(start_date,num_days,auto_generate){
         
         var self = this ;
         //GETS days_ahead FROM TODAYS DATE OF MEALS
@@ -74,45 +84,36 @@ module.exports = NodeHelper.create({
         //IF DB DOESN"T CONTAIN DATA FOR THOSE DATES IT'S GENERATED RANDOMLY
         var meal_plan = [];
         for(i=0;i<num_days;i++){
-            console.log(i) ;
-            var planned_meal = {} ;
             //GET EACH DAY PLANNED
             var searchDate =  moment(start_date).add(i,'day').format('YYYYMMDD') ;
-            var plan = self.planned_meals.findOne( { date: { '$eq' :searchDate } } ) ;
             
-            //IF NO DATA, RANDOMLY PICK A MEAL, ADD TO DB FOR THE DAY AND PUSH INTO MEAL PLAN
-            if(plan){
-                planned_meal = self.meals.findOne( { '$loki': { '$eq' :plan .id } });
-            }else{
-                var meal_ids = this.meals.where(x=>true);
-                // console.log(meal_ids);  
-                if(!meal_ids.length){
-                    //NO MEALS IN DB
-                    return [];
-                } else {       
-                    var num_ids = meal_ids.length ;
-                    //Find random meal
-                    var meal_id_index = Math.floor(Math.random() *  num_ids);
-                    
-                    planned_meal  = self.meals.findOne( { '$loki': { '$eq' :meal_ids.map(x=>x.$loki)[meal_id_index] } });
+            //PULL THE PLAN
+            var planned_meal = self.planned_meals.findOne( { date: { '$eq' :searchDate } } ) ;
+            var meal = {} ;
 
-                    plan ={id:planned_meal .$loki, 
-                        date:searchDate};
-
-                    //Add to meal_plan db
-                    self.planned_meals.insert(plan) ;
-                }
+            if(planned_meal){
+                //FIND THE MEAL
+                meal = self.meals.findOne( { '$loki': { '$eq' :planned_meal.id } })  ;
+            }  else if (auto_generate){
+                //IF ALLOWED TO GENERATE MEALS, PICK A RANDOM ONE AND INSTER TO PLANNED_MEALS
+                meal = self.getRandomMeal() ;
+                planned_meal = {id:meal.$loki,date:searchDate} ;
+                self.planned_meals.insert(planned_meal) ;
+            } else {
+                //IF NO PLAN, AND NOT GENERATING MEALS CREATE AN 'EMPTY' MEAL
+                meal = {
+                    name:'???'
+                };
             }
             
-            meal_plan.push(
-                {
-                    name:planned_meal.name,
-                    date: plan.date,
-                    display_date: moment(plan.date).format('ddd, MMM DD')
-                }) ;
+            //PUSH INTO MEAL_PLAN ARRY
+            meal_plan.push({
+                name: meal.name,
+                date: searchDate,
+                display_date: moment(searchDate).format('ddd, MMM DD')
+            }) ;
 
         }
-        // console.log(meal_plan) ;
         return meal_plan ;            
     },
 
