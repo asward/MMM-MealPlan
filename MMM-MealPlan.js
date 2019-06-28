@@ -2,7 +2,7 @@ Module.register("MMM-MealPlan",{
     index: 0,
     meal_plan: [],
     defaults:{
-        num_days: 10,
+        num_days: 7,
         generateMeals: false ,
     },
 
@@ -17,19 +17,10 @@ Module.register("MMM-MealPlan",{
         return currentMeals; 
     },
     
-    // updateMeals: function(){
-    //     var self = this ;
-    //     var filteredAnnouncements = self.getFilteredAnnouncements() ;
-    //     var maxIndex = filteredAnnouncements.length-1 ;
-
-    //     if(++self.index > maxIndex){
-    //         self.index = 0 ;
-    //     }
-    //     self.current_announcement = filteredAnnouncements[self.index] ;
-    // },
     getHeader: function() {
 		return this.data.header ;
-	},
+    },
+    
 	// Override dom generator.
 	getDom: function() {
         var self = this ;
