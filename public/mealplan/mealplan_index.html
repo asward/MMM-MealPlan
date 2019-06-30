@@ -1,0 +1,27 @@
+<div id='mealplanlist'>
+</div>
+
+<script>
+    window.onload = (e)=>{
+        var date = new Date() ;
+        var datestring = date.getFullYear().toString()
+         + (date.getMonth()+1).toString().padStart(2,'0') 
+         + date.getDate().toString().padStart(2,'0');
+        
+         console.log(datestring);
+        var req = new XMLHttpRequest();
+
+        req.onload = function(e) {
+            
+            
+            document.querySelector('#mealplanlist').innerHTML = this.responseText ;
+        }
+
+        req.open("GET", `/partial/mealplan/${datestring}/7`);
+        req.responseText = 'text/html';
+        req.send();
+
+
+
+    };
+</script>
